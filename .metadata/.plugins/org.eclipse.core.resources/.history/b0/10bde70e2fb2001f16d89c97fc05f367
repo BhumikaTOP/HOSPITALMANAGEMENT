@@ -1,0 +1,54 @@
+package com.au.ExcelReader; // Make sure this matches your package structure
+
+import java.io.*;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.*;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.sl.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Workbook;
+
+
+public class ExcelReader {
+
+	public static void main(String[] args) {
+		String filePath = "D://Downloads/Testing.xls"; // Change this to your file path
+
+		try (FileInputStream fis = new FileInputStream(new File(filePath));
+				HSSFWorkbook workbook = new HSSFWorkbook(fis)){
+			HSSFSheet sheet = workbook.getSheetAt(0);
+			// Iterate through each row in the sheet
+			for (Row row : sheet) {
+				// Iterate through each cell in the row
+				for (Cell cell : row) {
+					// Process the cell based on its type
+					switch (cell.getCellType()) {
+					case STRING:
+						System.out.print("String: " + cell.getStringCellValue() + "\t");
+						break;
+					case NUMERIC:
+						System.out.print("Numeric: " + cell.getNumericCellValue() + "\t");
+						break;
+					case BOOLEAN:
+						System.out.print("Boolean: " + cell.getBooleanCellValue() + "\t");
+						break;
+					case FORMULA:
+						System.out.print("Formula: " + cell.getCellFormula() + "\t");
+						break;
+					default:
+						System.out.print("Unknown Type\t");
+					}
+				}
+				System.out.println(); // New line for each row
+			}
+
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+}
